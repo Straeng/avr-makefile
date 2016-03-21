@@ -10,6 +10,11 @@ LDSCRIPT 	= 					# optional
 TARGET 		= atmega328p
 CPU_FREQ 	= 16000000L
 
+# Fuses
+LFUSE		= #0xE2
+HFUSE		= #0xDF
+EFUSE		= #0xFF
+
 # Upload configuration
 ISP_IF 		= usb				# For ISP programming 
 PROG_PORT	= /dev/ttyUSB0
@@ -94,7 +99,7 @@ isp_upload: $(DISTDIR)/$(PROGNAME).hex
 # Set fuses iusing ISP (AVR Dragon)
 .PHONY: isp_fuses
 isp_fuses:
-	avrdude -cdragon_isp -p$(TARGET) -P$(ISP_IF) -Ulfuse:w:0xff:m -Uhfuse:w:0xdc:m -Uefuse:w:0x04:m
+	avrdude -cdragon_isp -p$(TARGET) -P$(ISP_IF) -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m
 
 # Transform to hex
 $(DISTDIR)/$(PROGNAME).hex: $(DISTDIR)/$(PROGNAME).elf
